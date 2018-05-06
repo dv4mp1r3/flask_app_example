@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block container %}
+<form method="get" name="searchForm" class="search_bar huge">
+    <input name="query" type="text" {% if query is not none %}value="{{ query }}"{% endif %}
+           placeholder="Looking for something?"/>
+    <button type="submit" value="Search">Search</button>
+</form></br>
+{% if query is not none %}
+<div class="searchData">
+    <!--<div class="searchQuery">
+        search query is "{{ query }}"</br>
+    </div>-->
+    <div id="searchResult">
+        {% if result is not none %}
+        <ul>
+            {% for item in result %}
+                {% set item = item['_source'] %}
+                <li>
+                    <div class="imgl"><img src="{{ item['protocol'] }}://{{ item['favicon'] }}" alt=""></div>
+                    {% if item['title']|length > 150 %}
+                        <p class="latestnews">{{ item['title'][:150] }}...</p>
+                    {% else %}
+                        <p class="latestnews">{{ item['title'] }}</p>
+                    {% endif %}
+                    {% if item['text']|length > 150 %}
+                        <p class="latestnews">{{ item['text'][:150] }}...</p>
+                    {% else %}
+                        <p class="latestnews">{{ item['text'] }}</p>
+                    {% endif %}
+                    <p class="readmore">
+                        <a href="{{ item['protocol'] }}://{{ item['domain'] }}/{{ item['resource'] }}">More »</a>
+                    </p>
+                </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <div>
+            No Result
+        </div>
+        {% endif %}
+    </div>
+    {% if pagination is not none %}
+        <div class="searchPagination">
+            <ul class="pagination modal-1">
+                {% for item in pagination['pages'] %}
+                <li><a href="/?query={{query}}&page={{item['number']}}"
+                       class="{{item['class']}}">{{item['caption']}}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}
