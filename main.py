@@ -39,6 +39,8 @@ def filter_page(page):
         page = int(page)
         if page is 0 or page < 0:
             page = 1
+    else:
+        page = 1
     return page
 
 
